@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
+import { injectIntl, FormattedMessage } from 'react-intl'
+
 import { loginRequest, logoutRequest } from '../../actions/authActions'
 
 import LoginForm from './LoginForm'
@@ -72,7 +74,11 @@ class LogInAndOut extends Component {
             className="btn btn-link navbar-btn btn-as-navbar-link"
             onClick={this.open}
           >
-            Log in
+            <FormattedMessage
+              id="mainToolBar.login"
+              description="Login button in main toolbar"
+              defaultMessage="Log in"
+            />
           </button>
         </li>
         <Modal
@@ -80,7 +86,13 @@ class LogInAndOut extends Component {
           show={this.state.showModal} onHide={this.close}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Log in</Modal.Title>
+            <Modal.Title>
+              <FormattedMessage
+                id="mainToolBar.login"
+                description="Login button in main toolbar"
+                defaultMessage="Log in"
+              />
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <LoginForm error={this.props.errorMessage} handleFormSubmit={this.handleLogin} />
@@ -114,4 +126,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps, { loginRequest, logoutRequest })(LogInAndOut)
+export default connect(mapStateToProps, { loginRequest, logoutRequest })(injectIntl(LogInAndOut))

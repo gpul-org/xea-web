@@ -2,9 +2,44 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
+import { injectIntl, FormattedMessage, defineMessages, intlShape } from 'react-intl'
+
 import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
 
 import ErrorMessage from '../common/ErrorMessage'
+
+const messages = defineMessages({
+  usernameLabel: {
+    id: 'login.username',
+    description: 'User name label in login popup',
+    defaultMessage: 'User name'
+  },
+  usernamePlaceholder: {
+    id: 'login.username',
+    description: 'User name input placeholder in login popup',
+    defaultMessage: 'User name'
+  },
+  passwordLabel: {
+    id: 'login.password',
+    description: 'Password label in login popup',
+    defaultMessage: 'Password'
+  },
+  passwordPlaceholder: {
+    id: 'login.password',
+    description: 'Password input placeholder in login popup',
+    defaultMessage: 'Password'
+  },
+  loginButton: {
+    id: 'login.loginButton',
+    description: 'Login button text',
+    defaultMessage: 'Log in'
+  },
+  clearButton: {
+    id: 'login.clearButton',
+    description: 'Clear values button text',
+    defaultMessage: 'Clear'
+  }
+})
 
 class LoginForm extends Component {
   constructor (props) {
@@ -60,22 +95,31 @@ class LoginForm extends Component {
   }
 
   render () {
+    const formattedText = {
+      usernamePlaceholder: this.props.intl.formatMessage(messages.usernameLabel),
+      passwordPlaceholder: this.props.intl.formatMessage(messages.passwordLabel)
+    }
+
     const { handleSubmit, reset, pristine, submitting, valid, errorMessage } = this.props
     return (
       <form onSubmit={handleSubmit(this.props.handleFormSubmit)}>
         {errorMessage ? <ErrorMessage error={errorMessage} /> : null}
         <Field
           name="username"
-          label="User name"
-          placeholder="username"
+          label={
+            <FormattedMessage {...messages.usernameLabel} />
+          }
+          placeholder={formattedText.usernamePlaceholder}
           component={this.renderField}
           type="text"
           normalize={this.usernameNormalizer}
         />
         <Field
           name="password"
-          label="Password"
-          placeholder="Password"
+          label={
+            <FormattedMessage {...messages.passwordLabel} />
+          }
+          placeholder={formattedText.passwordPlaceholder}
           component={this.renderField}
           type="password"
         />
@@ -84,7 +128,7 @@ class LoginForm extends Component {
             disabled={pristine || submitting || !valid}
             className="btn btn-primary"
           >
-            Log in
+            <FormattedMessage {...messages.loginButton} />
           </button>
           <button
             type="button"
@@ -92,7 +136,7 @@ class LoginForm extends Component {
             onClick={reset}
             className="btn btn-warning pull-right"
           >
-            Clear Values
+            <FormattedMessage {...messages.clearButton} />
           </button>
         </div>
       </form>
@@ -107,7 +151,8 @@ LoginForm.propTypes = {
   submitting: PropTypes.bool,
   reset: PropTypes.func,
   handleSubmit: PropTypes.func,
-  handleFormSubmit: PropTypes.func
+  handleFormSubmit: PropTypes.func,
+  intl: intlShape.isRequired
 }
 
 // TODO: must be defined and enforced.
@@ -147,4 +192,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(reduxForm(formOptions)(LoginForm))
+export default connect(mapStateToProps)(reduxForm(formOptions)(injectIntl(LoginForm)))

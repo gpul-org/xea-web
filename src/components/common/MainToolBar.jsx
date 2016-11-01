@@ -1,5 +1,6 @@
 import React from 'react'
-import { Link, IndexLink } from 'react-router'
+import { Link } from 'react-router'
+import { injectIntl, FormattedMessage } from 'react-intl'
 
 import LogInAndOut from '../login/LogInAndOut'
 
@@ -25,10 +26,13 @@ function MainToolBar (props) {
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
               <li>
-                <IndexLink to="/">Home</IndexLink>
-              </li>
-              <li>
-                <Link to="/about">About</Link>
+                <Link to="/about">
+                  <FormattedMessage
+                    id="mainToolBar.about"
+                    description="About link in main toolbar"
+                    defaultMessage="About"
+                  />
+                </Link>
               </li>
             </ul>
             <LogInAndOut />
@@ -39,4 +43,4 @@ function MainToolBar (props) {
   )
 }
 
-export default MainToolBar
+export default injectIntl(MainToolBar)
